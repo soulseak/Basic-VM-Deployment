@@ -1,24 +1,23 @@
-Param {
+Param (
     [Parameter(Mandatory = $true)]
-    [string]  $prefix
+    [string]  $prefix,
     [Parameter(Mandatory = $true)]
-    [string]  $project
+    [string]  $project,
     [Parameter(Mandatory = $false)]
-    [string]  $location = "westeurope"
+    [string]  $location = "westeurope",
     [Parameter(Mandatory = $false)]
-    [int]  $vmCount = 1
+    [int]  $vmCount = 1,
     [Parameter(Mandatory = $false)]
-    [switch]  $JoinDomain
+    [switch]  $JoinDomain,
     [Parameter(Mandatory = $false)]
-    [switch]  $EnableBackup
+    [switch]  $EnableBackup,
     [Parameter(Mandatory = $false)]
-    [switch]  $InstallNotePad
+    [switch]  $InstallNotePad,
     [Parameter(Mandatory = $true)]
-    [string] $subnetId
+    [string] $subnetId,
     [Parameter(Mandatory = $true)]
     [string] $vmSize
-
-}
+)
 
 function New-Password {
     return (([char[]]([char]65..[char]90)) + ([char[]]([char]97..[char]122)) + 0..9 + 0..9 | Sort-Object { Get-Random })[0..16] -join ''

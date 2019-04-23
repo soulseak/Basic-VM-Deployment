@@ -1,11 +1,11 @@
-param {
+param (
     [Parameter(Mandatory = $true)]
-    [string]  $prefix
+    [string]  $prefix,
     [Parameter(Mandatory = $true)]
-    [string]  $project
+    [string]  $project,
     [Parameter(Mandatory = $false)]
     [string]  $location = "westeurope"    
-}
+)
 
 $resourceGroup = $prefix + "-$project-rg"
 $keyvaultname = $prefix + "-$project-keyvault"

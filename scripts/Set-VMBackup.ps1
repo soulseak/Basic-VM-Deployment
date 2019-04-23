@@ -1,12 +1,11 @@
-Param{
+Param(
     [Parameter(Mandatory = $true)]
-    [String] $vmName
+    [String] $vmName,
     [Parameter(Mandatory = $true)]
-    [String] $resourceGroup
+    [String] $resourceGroup,
     [Parameter(Mandatory = $false)]
     [String] $policy = "ProductionPolicy"
-    
-}
+)
 # Parameter help description
 
 $vault = Get-AzRecoveryServicesVault

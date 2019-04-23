@@ -1,10 +1,9 @@
-param {
+param (
     [Parameter(Mandatory = $true)]
-    [string]  $vmName
+    [string]  $vmName,
     [Parameter(Mandatory = $true)]
     [string]  $resourceGroupName
-}
-
+)
 #Domain Join
 
 Restart-AzVM -Name $vmName -ResourceGroupName $resourceGroupName

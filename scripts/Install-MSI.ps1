@@ -1,14 +1,14 @@
-param {
+[CmdletBinding()]
+Param (
     [Parameter(Mandatory = $true)]
-    [string] $scriptpath
+    [string] $scriptpath,
     
     [Parameter(Mandatory = $true)]
-    [string] $vmName
+    [string] $vmName,
     
     [Parameter(Mandatory = $true)]
     [string] $resourceGroup
-    
-}
+)
     
 #Install MSI
     
