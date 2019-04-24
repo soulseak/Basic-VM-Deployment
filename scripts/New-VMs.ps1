@@ -74,7 +74,7 @@ for ($i = 1; $i -le $vmCount; $i++) {
 
     #region create VM
     # Create a virtual machine configuration
-    Write-Host "Deploy VM"
+    Write-Host "Deploy VM $vmName"
     $vmConfig = New-AzVMConfig -VMName $vmName -VMSize $vmSize -AvailabilitySetId $avaiabilityset.Id | `
         Set-AzVMOperatingSystem -Windows -ComputerName $vmName -Credential $cred | `
         Set-AzVMSourceImage -PublisherName MicrosoftWindowsServer -Offer WindowsServer -Skus 2016-Datacenter -Version latest | `
