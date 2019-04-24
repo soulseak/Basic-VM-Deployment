@@ -1,3 +1,4 @@
+[CmdletBinding()]
 Param(
     [Parameter(Mandatory = $true)]
     [String] $vmName,
