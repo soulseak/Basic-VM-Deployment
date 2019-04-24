@@ -3,7 +3,7 @@ Param(
     [Parameter(Mandatory = $true)]
     [String] $vmName,
     [Parameter(Mandatory = $true)]
-    [String] $resourceGroup,
+    [String] $resourceGroupName,
     [Parameter(Mandatory = $false)]
     [String] $policy = "ProductionPolicy"
 )
@@ -13,4 +13,4 @@ $vault = Get-AzRecoveryServicesVault
 $policy = Get-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.id | Where-Object Name -eq $policy
 $context = Set-AzRecoveryServicesVaultContext -Vault $vault
 
-$BackupProtection = Enable-AzRecoveryServicesBackupProtection -Policy $policy -Name $vmName -ResourceGroupName $resourceGroup
+$BackupProtection = Enable-AzRecoveryServicesBackupProtection -Policy $policy -Name $vmName -ResourceGroupName $resourceGroupName

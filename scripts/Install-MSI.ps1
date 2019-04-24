@@ -7,11 +7,11 @@ Param (
     [string] $vmName,
     
     [Parameter(Mandatory = $true)]
-    [string] $resourceGroup
+    [string] $resourceGroupName
 )
     
 #Install MSI
     
-Invoke-AzVMRunCommand -ResourceGroupName $resourceGroup -Name $vmName -CommandId 'RunPowerShellScript' -ScriptPath .\installnotepad.ps1
+Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -Name $vmName -CommandId 'RunPowerShellScript' -ScriptPath .\scripts\installnotepad.ps1
 
 
