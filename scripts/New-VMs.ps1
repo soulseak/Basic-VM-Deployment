@@ -110,17 +110,17 @@ foreach ($vm in $vms) {
     if ($InstallNotePad) {
         
         Write-Host "Install NotePad on $vmName"
-        .\Install-MSI.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName -scriptPath ".\installnotepad.ps1"
+        .\scripts\Install-MSI.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName -scriptPath ".\installnotepad.ps1"
     }
 
     if ($JoinDomain) {
         Write-Host "Join Domain on $vmName"
-        .\Join-Domain.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName
+        .\scripts\Join-Domain.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName
     }
   
     if ($EnableBackup) {
         Write-Host "Enable Backup on $vmName"
-        .\Set-VMBackup.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName
+        .\scripts\Set-VMBackup.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName
     }
 }
 

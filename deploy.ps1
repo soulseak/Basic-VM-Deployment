@@ -1,7 +1,6 @@
-
 # Variables for common values
 $prefix = "bsflo"
-$project = "pro"
+$project = "uno"
 $location = "westeurope"
 $vmCount = 2
 <# Get Available VM Sizes
@@ -13,6 +12,6 @@ $vn = Get-AzVirtualNetwork
 $sn = $vn.Subnets | Where-Object {$_.Name -eq "bsflo-production-subnet"}
 
 .\scripts\New-CommonResources.ps1 -prefix $prefix -project $project -Location $location 
-.\scripts\New-VMs.ps1 -Location $location -prefix $prefix -project $project -vmSize $vmSize `
-                      -subnetId $sn.id -vmCount $vmCount -JoinDomain:$true -EnableBackup:$true -InstallNotePad:$true
-
+$vms = .\scripts\New-VMs.ps1 -Location $location -prefix $prefix -project $project -vmSize $vmSize `
+                      -subnetId $sn.id -vmCount $vmCount -JoinDomain $true -EnableBackup $true -InstallNotePad $true
+Write-Host $vms

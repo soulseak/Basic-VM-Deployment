@@ -28,5 +28,3 @@ $protectedSettings = '{ "Password": "' + $domainjoinuserPassword + '" }'
 $extension = Set-AzVMExtension -ResourceGroupName $resourceGroupName -ExtensionType "JsonADDomainExtension" `
     -Name "joindomain" -Publisher "Microsoft.Compute" -TypeHandlerVersion "1.0" `
     -VMName $VmName -Location $location -SettingString $Settings -ProtectedSettingString $protectedSettings
-
-Restart-AzVM -Name $vmName -ResourceGroupName $resourceGroupName -WarningAction SilentlyContinue
