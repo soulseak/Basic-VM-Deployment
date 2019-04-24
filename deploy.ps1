@@ -14,4 +14,4 @@ $sn = $vn.Subnets | Where-Object {$_.Name -eq "bsflo-production-subnet"}
 .\scripts\New-CommonResources.ps1 -prefix $prefix -project $project -Location $location 
 $vms = .\scripts\New-VMs.ps1 -Location $location -prefix $prefix -project $project -vmSize $vmSize `
                       -subnetId $sn.id -vmCount $vmCount -JoinDomain $true -EnableBackup $true -InstallNotePad $true
-Write-Host $vms
+$vms | ft
