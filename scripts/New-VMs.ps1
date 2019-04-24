@@ -1,19 +1,22 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $true)]
-    [string]  $prefix,
+    [string] $prefix,
     [Parameter(Mandatory = $true)]
-    [string]  $project,
+    [string] $project,
     [Parameter(Mandatory = $false)]
-    [string]  $location = "westeurope",
+    [string] $location = "westeurope",
+
     [Parameter(Mandatory = $false)]
-    [int]  $vmCount = 1,
+    [int] $vmCount = 1,
+    
     [Parameter(Mandatory = $false)]
-    [switch]  $JoinDomain,
+    [bool] $JoinDomain = $false,
     [Parameter(Mandatory = $false)]
-    [switch]  $EnableBackup,
+    [bool] $EnableBackup = $false,
     [Parameter(Mandatory = $false)]
-    [switch]  $InstallNotePad,
+    [bool] $InstallNotePad = $false,
+    
     [Parameter(Mandatory = $true)]
     [string] $subnetId,
     [Parameter(Mandatory = $true)]
@@ -42,6 +45,7 @@ $avaiabilityset = New-AzAvailabilitySet -ResourceGroupName $resourceGroupName -N
 for ($i = 1; $i -le $vmCount; $i++) {
     #region Define VM Name
     $count = $('{0:d3}' -f $i )
+    Write-Host $count
     $vmName = $prefix + "-" + $project + $count
     #endregion Define VM Name
 
@@ -69,8 +73,8 @@ for ($i = 1; $i -le $vmCount; $i++) {
         -SubnetId $subnetId -PublicIpAddressId $pip.Id
 
     #Make IP Static
-    $Nic.IpConfigurations[0].PrivateIpAllocationMethod = "Static"
-    $NIC = Set-AzNetworkInterface -NetworkInterface $Nic
+    $nic.IpConfigurations[0].PrivateIpAllocationMethod = "Static"
+    $nic = Set-AzNetworkInterface -NetworkInterface $nic
     #endregion network
 
     #region create VM
@@ -99,10 +103,12 @@ for ($i = 1; $i -le $vmCount; $i++) {
 
 #Wait for all Deployments to Finish
 Write-Host "Wait for Deployments to finish"
-Get-Job | Wait-Job
+Get-Job | Wait-Job | Out-Null
 
-foreach ($vmName in $vmNames) {
+foreach ($vm in $vms) {
+    $vmName = $vm.Name
     if ($InstallNotePad) {
+        
         Write-Host "Install NotePad on $vmName"
         .\Install-MSI.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName -scriptPath ".\installnotepad.ps1"
     }
