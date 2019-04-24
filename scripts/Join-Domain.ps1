@@ -6,8 +6,10 @@ param (
     [string]  $resourceGroupName
 )
 #Domain Join
-
+$prefBackup = $WarningPreference
+$WarningPreference = 'SilentlyContinue'
 Restart-AzVM -Name $vmName -ResourceGroupName $resourceGroupName
+$WarningPreference = $prefBackup
 
 #DomainJoin Credentials
 $mydomain = "mydomain.local"
@@ -28,3 +30,7 @@ $protectedSettings = '{ "Password": "' + $domainjoinuserPassword + '" }'
 $extension = Set-AzVMExtension -ResourceGroupName $resourceGroupName -ExtensionType "JsonADDomainExtension" `
     -Name "joindomain" -Publisher "Microsoft.Compute" -TypeHandlerVersion "1.0" `
     -VMName $VmName -Location $location -SettingString $Settings -ProtectedSettingString $protectedSettings
+
+$WarningPreference = 'SilentlyContinue'
+Restart-AzVM -Name $vmName -ResourceGroupName $resourceGroupName
+$WarningPreference = $prefBackup

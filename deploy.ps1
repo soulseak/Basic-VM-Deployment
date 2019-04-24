@@ -1,6 +1,6 @@
 # Variables for common values
 $prefix = "bsflo"
-$project = "uno"
+$project = "man"
 $location = "westeurope"
 $vmCount = 2
 <# Get Available VM Sizes
