@@ -31,7 +31,7 @@ $keyvaultname = $prefix + "-$project-keyvault"
 $bootdiagStorageName = $prefix + $project + "bootdiag"
 
 #region Create Availabiliy Set
-
+Write-Host "Deploy Availability set $availabilitysetName"
 $avaiabilityset = New-AzAvailabilitySet -ResourceGroupName $resourceGroupName -Name $avaiabilitysetName -Location $location -Sku Aligned -PlatformUpdateDomainCount 2 -PlatformFaultDomainCount 2
 
 #endregion Create Availabiliy Set
@@ -45,7 +45,8 @@ for ($i = 1; $i -le $vmCount; $i++) {
     #endregion Define VM Name
 
     #region Create and Store Secret in Vault
-
+    
+    Write-Host "Generate Password and Store it"
     $Password = New-Password
     $secpasswd = ConvertTo-SecureString $Password -AsPlainText -Force
     $secret = Set-AzKeyVaultSecret -VaultName $keyvaultname -Name ("$vmName-localadmin") -SecretValue $secpasswd
@@ -56,11 +57,12 @@ for ($i = 1; $i -le $vmCount; $i++) {
 
     #region Network
     # Create a public IP address and specify a DNS name
+    Write-Host "Generate Public IP"
     $pip = New-AzPublicIpAddress -ResourceGroupName $resourceGroupName -Location $location `
         -Name $($vmName + $(Get-Random)) -AllocationMethod Static -IdleTimeoutInMinutes 4
 
 
-      
+    Write-Host "Geneate NIC"
     # Create a virtual network card and associate with public IP address and NSG
     $nic = New-AzNetworkInterface -Name $($vmName + "-nic") -ResourceGroupName $resourceGroupName -Location $location `
         -SubnetId $subnetId -PublicIpAddressId $pip.Id
@@ -72,7 +74,7 @@ for ($i = 1; $i -le $vmCount; $i++) {
 
     #region create VM
     # Create a virtual machine configuration
-    
+    Write-Host "Deploy VM"
     $vmConfig = New-AzVMConfig -VMName $vmName -VMSize $vmSize -AvailabilitySetId $avaiabilityset.Id | `
         Set-AzVMOperatingSystem -Windows -ComputerName $vmName -Credential $cred | `
         Set-AzVMSourceImage -PublisherName MicrosoftWindowsServer -Offer WindowsServer -Skus 2016-Datacenter -Version latest | `
@@ -95,19 +97,23 @@ for ($i = 1; $i -le $vmCount; $i++) {
 } #for i -le vmcount
 
 #Wait for all Deployments to Finish
+Write-Host "Wait for Deployments to finish"
 Get-Job | Wait-Job
 
 foreach ($vmName in $vmNames) {
     if ($InstallNotePad) {
-        .\scripts\Install-MSI.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName -scriptPath ".\installnotepad.ps1"
+        Write-Host "Install NotePad on $vmName"
+        .\Install-MSI.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName -scriptPath ".\installnotepad.ps1"
     }
 
     if ($JoinDomain) {
-        .\scripts\Join-Domain.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName
+        Write-Host "Join Domain on $vmName"
+        .\Join-Domain.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName
     }
   
     if ($EnableBackup) {
-        .\scripts\Set-VMBackup.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName
+        Write-Host "Enable Backup on $vmName"
+        .\Set-VMBackup.ps1 -vmName $vmName -ResourceGroupName $resourceGroupName
     }
 }
 
